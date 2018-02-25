@@ -1,0 +1,42 @@
+import java.net.*;
+import java.awt.*;
+import java.io.*;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+public class DrawImageAnimator extends JFrame{
+	private Image image;
+//	private JPanel panel=new JPanel();
+	DrawImageAnimator(){
+		getImage();
+		init();
+	}
+	void init() {
+		setTitle("Image");
+		setBounds(100,100,300,400);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		add(new JPanel() {
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if(image==null)	return;
+				g.drawImage(image,0,0,this);
+			}
+		});
+		setVisible(true);
+	}
+	
+	
+	void getImage() {
+		try {
+			URI uri=getClass().getResource(".").toURI();
+			System.out.println(uri);
+			image=ImageIO.read(new File(new File(uri),"Kenny.jpg"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		new DrawImageAnimator();
+	}
+}
