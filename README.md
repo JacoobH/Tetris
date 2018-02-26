@@ -1,3 +1,3 @@
 # Tetris
 Tetris by Java
-![image](https://github.com/JacoobH/Tetris/Image/updateSpace.png)
+![image](https://github.com/JacoobH/Tetris/blob/master/Image/updateSpace.png)
