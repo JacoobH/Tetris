@@ -11,16 +11,16 @@ public class Tetris extends JFrame{
 	
 	public final static int WIDTH = 320;
 	public final static int HEIGHT = 600;
-	//·½¿é±ß³¤
+	//æ–¹å—è¾¹é•¿
 	public static final int BLOCK_SIZE = 20;
-	//´°¿ÚºáÏò·½¿é×ÜÊı
+	//çª—å£æ¨ªå‘æ–¹å—æ€»æ•°
 	public static final int WIDTH_NUM = WIDTH / BLOCK_SIZE;		//16
-	//´°¿ÚÊúÖ±·½¿é×ÜÊı
+	//çª—å£ç«–ç›´æ–¹å—æ€»æ•°
 	public static final int HEIGHT_NUM = HEIGHT / BLOCK_SIZE;	//30
-	//´ú±í·½¿éÔÚ´°¿ÚÉÏµÄ·Ö²¼Çé¿ö£¬0´ú±í¿Õ£¬1´ú±íÕıÔÚÒÆ¶¯µÄ·½¿é£¬2´ú±íÒÑ¾­¹Ì¶¨µÄ·½¿é
+	//ä»£è¡¨æ–¹å—åœ¨çª—å£ä¸Šçš„åˆ†å¸ƒæƒ…å†µï¼Œ0ä»£è¡¨ç©ºï¼Œ1ä»£è¡¨æ­£åœ¨ç§»åŠ¨çš„æ–¹å—ï¼Œ2ä»£è¡¨å·²ç»å›ºå®šçš„æ–¹å—
 	public static int[][] space=new int[HEIGHT_NUM][WIDTH_NUM];
-	//ÆßÖÖÍ¼ĞÎ£¬·Ö±ğÊÇÌï×ÖĞÍ0¡¢Ò»×ÖĞÍ1¡¢ÕıZĞÍ2¡¢·´ZĞÍ3¡¢ÕıLĞÍ4¡¢·´LĞÍ5¡¢T×ÖĞÍ6¡£Ã¿¸öÍ¼ĞÎ°üº¬4¸ö·½¿é¡£ÆäÖĞ{0,0}ÎªÖĞĞÄµã¡£
-	//ÆäÖĞµÚÒ»¸ö[]´ú±íÍ¼ĞÎÖÖÀà¡¢µÚ¶ş¸ö[]Îªx×ø±ê¡¢µÚÈı¸ö[]ÔòÎªy×ø±ê
+	//ä¸ƒç§å›¾å½¢ï¼Œåˆ†åˆ«æ˜¯ç”°å­—å‹0ã€ä¸€å­—å‹1ã€æ­£Zå‹2ã€åZå‹3ã€æ­£Lå‹4ã€åLå‹5ã€Tå­—å‹6ã€‚æ¯ä¸ªå›¾å½¢åŒ…å«4ä¸ªæ–¹å—ã€‚å…¶ä¸­{0,0}ä¸ºä¸­å¿ƒç‚¹ã€‚
+	//å…¶ä¸­ç¬¬ä¸€ä¸ª[]ä»£è¡¨å›¾å½¢ç§ç±»ã€ç¬¬äºŒä¸ª[]ä¸ºxåæ ‡ã€ç¬¬ä¸‰ä¸ª[]åˆ™ä¸ºyåæ ‡
 	private final int[][][] shapes = {{{-1,0},{0,0},{-1,1},{0,1}},
 									  {{-1,0},{0,0},{1,0}, {2,0}}, 
 								      {{-1,0},{0,0},{0,1}, {1,1}},
@@ -28,9 +28,13 @@ public class Tetris extends JFrame{
 								      {{-1,1},{-1,0},{0,0},{1,0}},
 								      {{-1,0},{0,0},{1,0}, {1,1}},
 								      {{-1,0},{0,0},{1,0}, {0,1}}};
-	//µ±Ç°ÕıÔÚÏÂÂäµÄÍ¼ĞÎµÄ×ø±ê
+	//å½“å‰æ­£åœ¨ä¸‹è½çš„å›¾å½¢çš„åæ ‡
 	private int[][] currentShape = new int[4][2];
-	//Ñ¡ÔñÍ¼ĞÎ
+	//ç”»å¸ƒ
+	private Canvas canvas = new Canvas();
+	//å½“å‰ä¸­å¿ƒç‚¹çš„åæ ‡
+	private Point centerPos = new Point();
+	//é€‰æ‹©å›¾å½¢
 	private void choseShape() {
 		Random rand = new Random(47);
 		int index = rand.nextInt(6);
@@ -39,19 +43,36 @@ public class Tetris extends JFrame{
 				currentShape[i][j]=shapes[index][i][j];
 			}
 		}
+		centerPos.x = WIDTH_NUM / 2;
+		centerPos.y=0;
+		updateSpace(1);
 	}
+	//æ›´æ–°å›¾å½¢åˆ†å¸ƒ
+	private void updateSpace(int flag)
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			int x = centerPos.x + currentShape[i][0];
+			int y = centerPos.y + currentShape[i][1];
+			space[y][x] = flag;
+		}
+	}
+	//æ„é€ 
 	Tetris(){
 		init();
-		
+		add(canvas);
+		startGame();
 	}
 	void init() {
 		setTitle("Game");
 		setBounds(100,100,WIDTH,HEIGHT);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//Ìí¼ÓÍ¼ĞÎ
-		//add();
 		setVisible(true);
+	}
+	public void startGame()
+	{
+		choseShape();
 	}
 
 	public static void main(String[] args) {
